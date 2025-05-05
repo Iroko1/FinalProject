@@ -11,7 +11,9 @@ import SwiftUI
 struct FinalProjectApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationStack {
+                HomeView(viewModel: CurrencyViewModel())
+            }
         }
     }
 }
