@@ -9,11 +9,11 @@ import SwiftUI
 
 @main
 struct FinalProjectApp: App {
+    @StateObject private var viewModel = CurrencyViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                HomeView(viewModel: CurrencyViewModel())
-            }
+            MainView(viewModel: viewModel)
         }
     }
 }

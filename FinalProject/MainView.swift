@@ -16,12 +16,12 @@ struct MainView: View {
                     Label("Home", systemImage: "house")
                 }
 
-            ResultTabView(viewModel: viewModel)
+            ResultView(viewModel: viewModel)
                 .tabItem {
                     Label("Convert", systemImage: "arrow.left.arrow.right")
                 }
 
-            HistoryView(viewModel: viewModel)
+            HistoryView()
                 .tabItem {
                     Label("History", systemImage: "clock")
                 }
