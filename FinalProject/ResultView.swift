@@ -7,15 +7,15 @@
 
 import SwiftUI
 
-struct ResultView: View {
-    let amount: Double
-    let fromCurrency: Currency?
-    let toCurrency: Currency?
+struct ResultTabView: View {
+//    let amount: Double
+//    let fromCurrency: Currency?
+//    let toCurrency: Currency?
     @ObservedObject var viewModel: CurrencyViewModel
     
     
-    @State private var convertedAmount: Double?
-    @State private var isLoading = true
+//    @State private var convertedAmount: Double?
+//    @State private var isLoading = true
     
     var body: some View {
         VStack(spacing: 20) {

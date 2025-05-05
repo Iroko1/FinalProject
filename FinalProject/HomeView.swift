@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel: CurrencyViewModel
+    @ObservedObject var viewModel: CurrencyViewModel
+//    @StateObject var viewModel: CurrencyViewModel
     @State private var selectedCurrency: Currency?
     @State private var amount: String = ""
     @State private var fromCurrency: Currency?
@@ -59,25 +60,27 @@ struct HomeView: View {
                     .padding()
                 
 
-                
-                
-                NavigationLink(
-                    destination: ResultView(
-                        amount: Double(amount) ?? 0.0,
-                        fromCurrency: fromCurrency,
-                        toCurrency: toCurrency,
-                        viewModel: viewModel
-                    )
-                ) {
-                    Text("Convert")
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
+                Button("Convert") {
+                    if let from = viewModel.fromCurrency?.code,
+                       let to = viewModel.toCurrency?.code,
+                       let amount = Double(viewModel.amountToConvert) {
+                        
+                        viewModel.convertCurrency(from: from, to: to, amount: amount) { result in
+                            DispatchQueue.main.async {
+                                viewModel.convertedAmount = result
+                            }
+                        }
+                    }
                 }
-                .disabled(fromCurrency == nil || toCurrency == nil || Double(amount) == nil)
-                .padding(.top)
+                .disabled(viewModel.fromCurrency == nil ||
+                          viewModel.toCurrency == nil ||
+                          Double(viewModel.amountToConvert) == nil)
+                .padding()
+                .background(Color.blue)
+                .foregroundStyle(.white)
+                .cornerRadius(8)
+                
+                
                 
             }
             
