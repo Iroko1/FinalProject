@@ -59,7 +59,7 @@ class CurrencyViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     if let rate = result.rates[to] {
                         self.conversionRate = rate
-                        self.convertedAmount = rate * amount
+                        self.convertedAmount = rate
                         self.conversionDate = result.date
                         completion(true)
                     } else {
