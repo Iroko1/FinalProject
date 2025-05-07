@@ -102,6 +102,7 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject var viewModel: CurrencyViewModel
+    @Binding var selectedTab: Int
     
     var body: some View {
         NavigationView {
@@ -110,9 +111,11 @@ struct HomeView: View {
                     VStack(alignment: .leading) {
                         Text("From:")
                         Picker("From", selection: $viewModel.fromCurrency) {
+                            Text("USD").tag(nil as Currency?)
                             ForEach(viewModel.currencies, id: \.code) { currency in
-                                Text(currency.code).tag(currency as Currency?)
+                                Text("\(currency.code) - \(currency.name)").tag(currency as Currency?)
                             }
+                            
                         }
                         .pickerStyle(MenuPickerStyle())
                     }
@@ -120,8 +123,9 @@ struct HomeView: View {
                     VStack(alignment: .leading) {
                         Text("To:")
                         Picker("To", selection: $viewModel.toCurrency) {
+                            Text("JPY").tag(nil as Currency?)
                             ForEach(viewModel.currencies, id: \.code) { currency in
-                                Text(currency.code).tag(currency as Currency)
+                                Text("\(currency.code) - \(currency.name)").tag(currency as Currency?)
                             }
                         }
                         .pickerStyle(MenuPickerStyle())
@@ -134,17 +138,17 @@ struct HomeView: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding(.horizontal)
                 
-                NavigationLink(destination: ResultView(viewModel: viewModel)) {
-                    Text("Convert")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .padding(.horizontal)
-                    
+                Button("Convert") {
+                    if let from = viewModel.fromCurrency?.code,
+                       let to = viewModel.toCurrency?.code,
+                       let amount = Double(viewModel.amountToConvert) {
+                        viewModel.convertCurrency(from: from, to: to, amount: amount) { success in
+                            if success {
+                                selectedTab = 1
+                            }
+                        }
+                    }
                 }
-                .disabled(viewModel.fromCurrency == nil || viewModel.toCurrency == nil || Double(viewModel.amountToConvert) == nil)
                 
                 Spacer()
             }

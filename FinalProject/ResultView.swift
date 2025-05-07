@@ -9,17 +9,20 @@ import SwiftUI
 
 struct ResultView: View {
     @ObservedObject var viewModel: CurrencyViewModel
-    @State private var isLoading = true
+    @State private var isLoading = false
     @State private var hasError = false
+    @State private var isFavorite: Bool = false
+    @Binding var selectedTab: Int
 
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
                 if isLoading {
                     ProgressView("Converting...")
-                        .onAppear {
+                        .onAppear() {
                             performConversion()
                         }
+//
                 } else if hasError {
                     Text("Conversion failed. Please try again.")
                         .foregroundColor(.red)
@@ -35,13 +38,13 @@ struct ResultView: View {
                         .font(.title3)
                         .padding(.bottom)
 
-                    Text("Exchange Rate: \(rate)")
                     Text("Date: \(date)")
                         .foregroundColor(.gray)
                         .font(.footnote)
                     
-                    Button("Save to History") {
+                    Button("Save to Favorites") {
                         viewModel.saveCurrentConversionToHistory()
+                        isFavorite.toggle()
                     }
                     .padding()
                     .background(Color.green)
@@ -49,6 +52,10 @@ struct ResultView: View {
                     .cornerRadius(10)
                 } else {
                     Text("No conversion data available.")
+                }
+                if isFavorite {
+                    Text("favorited")
+                        .font(.caption)
                 }
                 
                 Spacer()
@@ -59,19 +66,21 @@ struct ResultView: View {
     }
 
     func performConversion() {
-        guard let from = viewModel.fromCurrency?.code,
-              let to = viewModel.toCurrency?.code,
-              let amount = Double(viewModel.amountToConvert) else {
-            self.isLoading = false
-            self.hasError = true
-            return
-        }
-
-        viewModel.convertCurrency(from: from, to: to, amount: amount) { success in
-            DispatchQueue.main.async {
-                self.isLoading = false
-                self.hasError = !success
-            }
-        }
+        self.isLoading = true
+        return
+//        guard let from = viewModel.fromCurrency?.code,
+//              let to = viewModel.toCurrency?.code,
+//              let amount = Double(viewModel.amountToConvert) else {
+//            self.isLoading = false
+//            self.hasError = true
+//            return
+//        }
+//
+//        viewModel.convertCurrency(from: from, to: to, amount: amount) { success in
+//            DispatchQueue.main.async {
+//                self.isLoading = false
+//                self.hasError = !success
+//            }
+//        }
     }
 }

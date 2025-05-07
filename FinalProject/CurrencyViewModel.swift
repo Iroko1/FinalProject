@@ -42,7 +42,7 @@ class CurrencyViewModel: ObservableObject {
     
     
     func convertCurrency(from: String, to: String, amount: Double, completion: @escaping (Bool) -> Void) {
-        let urlString = "https://api.fxratesapi.com/convert?from=\(from)&to=\(to)&amount=\(amount)"
+        let urlString = "https://api.fxratesapi.com/latest?base=\(from)&currencies=\(to)&amount=\(amount)&places=2&api_key=fxr_live_d0695d27f108e66dde6dbaf5aa597c9d4173"
         guard let url = URL(string: urlString) else {
             completion(false)
             return
@@ -83,6 +83,13 @@ class CurrencyViewModel: ObservableObject {
                     let response = try JSONDecoder().decode([String: Currency].self, from: data)
                     DispatchQueue.main.async {
                         self.currencies = response.values.sorted { $0.code < $1.code }
+                        
+                        if let usd = self.currencies.first(where: { $0.code == "USD" }) {
+                            self.fromCurrency = usd
+                        }
+                        if let jpy = self.currencies.first(where: { $0.code == "JPY" }) {
+                            self.toCurrency = jpy
+                        }
                     }
                 } catch {
                     print("Decoding error: \(error)")

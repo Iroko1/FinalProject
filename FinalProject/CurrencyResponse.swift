@@ -29,13 +29,18 @@ struct Currency: Codable, Hashable, Identifiable {
     let symbol_native: String
 }
 
-struct ConversionResponse: Decodable {
+struct ConversionResponse: Codable, Hashable {
     let success: Bool
-    let base: String
-    let date: String
+    let base: String?
+    let date: String?
     let rates: [String: Double]
 }
 
+struct errorResponse: Codable, Hashable {
+    let success: Bool
+    let error: String?
+    let description: String?
+}
 
 struct ConversionHistoryItem: Identifiable {
     let id = UUID()
