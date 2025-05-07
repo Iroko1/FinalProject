@@ -11,8 +11,9 @@ struct ResultView: View {
     @ObservedObject var viewModel: CurrencyViewModel
     @State private var isLoading = false
     @State private var hasError = false
-    @State private var isFavorite: Bool = false
+//    @State private var isFavorite: Bool = false
     @Binding var selectedTab: Int
+    @Binding var isFavorite: Bool
 
     var body: some View {
         NavigationView {
@@ -43,8 +44,11 @@ struct ResultView: View {
                         .font(.footnote)
                     
                     Button("Save to Favorites") {
-                        viewModel.saveCurrentConversionToHistory()
-                        isFavorite.toggle()
+                        if !isFavorite {
+                            viewModel.saveCurrentConversionToHistory()
+                            isFavorite = true
+                        }
+                        
                     }
                     .padding()
                     .background(Color.green)
@@ -67,6 +71,7 @@ struct ResultView: View {
 
     func performConversion() {
         self.isLoading = true
+//        self.isFavorite = false
         return
 //        guard let from = viewModel.fromCurrency?.code,
 //              let to = viewModel.toCurrency?.code,

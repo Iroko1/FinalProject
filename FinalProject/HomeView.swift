@@ -103,6 +103,7 @@ import SwiftUI
 struct HomeView: View {
     @ObservedObject var viewModel: CurrencyViewModel
     @Binding var selectedTab: Int
+    @Binding var isFavorite: Bool
     
     var body: some View {
         NavigationView {
@@ -145,6 +146,7 @@ struct HomeView: View {
                         viewModel.convertCurrency(from: from, to: to, amount: amount) { success in
                             if success {
                                 selectedTab = 1
+                                isFavorite = false
                             }
                         }
                     }
