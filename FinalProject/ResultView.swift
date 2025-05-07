@@ -43,24 +43,30 @@ struct ResultView: View {
                         .foregroundColor(.gray)
                         .font(.footnote)
                     
-                    Button("Save to Favorites") {
-                        if !isFavorite {
-                            viewModel.saveCurrentConversionToHistory()
-                            isFavorite = true
+                    if isFavorite {
+                        Button("Favorited") {}
+                            .padding()
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    } else {
+                        Button("Save to Favorites") {
+                            if !isFavorite {
+                                viewModel.saveCurrentConversionToHistory()
+                                isFavorite = true
+                            }
+                            
                         }
-                        
+                        .padding()
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
                     }
-                    .padding()
-                    .background(Color.green)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+                    
                 } else {
                     Text("No conversion data available.")
                 }
-                if isFavorite {
-                    Text("favorited")
-                        .font(.caption)
-                }
+                
                 
                 Spacer()
             }
